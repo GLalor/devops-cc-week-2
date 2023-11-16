@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  web1:
+    build: ./quote_gen
+    #commenting out for scaling
+    #container_name: gen
+    ports:
+      - "5000:5000"
+    volumes:
+      - "./quote_gen:/app"
+    # scale: 3  this was deprecated so tried out the deploy.replicas version
+    deploy:
+      mode: replicated
+      replicas: 3
+  web2:
+    build: ./quote_disp
+    #commenting out for scaling
+    #container_name: disp 
+    ports:
+      - "5001:5001"
+    depends_on:
+      - web1
+    volumes:
+      - "./quote_disp:/app"
+    # scale: 3  this was deprecated so tried out the deploy.replicas version
+    deploy:
+      mode: replicated
+      replicas: 3
